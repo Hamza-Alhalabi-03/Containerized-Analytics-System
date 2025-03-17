@@ -1,0 +1,77 @@
+
+services:
+  # PHP Web App for Data Entry
+  data-entry-app:
+    build: 
+      context: ./data-entry-app
+    ports:
+      - "8080:80"
+    volumes:
+      - ./data-entry-app:/var/www/html
+      - php_sessions:/var/lib/php/sessions
+    depends_on:
+      mysql:
+        condition: service_healthy
+      auth-service:
+        condition: service_started
+    networks:
+      - app-network
+    environment:
+      - SESSION_SAVE_PATH=/var/lib/php/sessions
+    # restart: unless-stopped
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:80"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+
+  # Authentication Service
+  auth-service:
+    build: 
+      context: ./auth-service
+    ports:
+      - "8081:80"
+    volumes:
+      - ./auth-service:/var/www/html
+      - php_sessions:/var/lib/php/sessions
+    networks:
+      - app-network
+    environment:
+      - SESSION_SAVE_PATH=/var/lib/php/sessions
+    # restart: unless-stopped
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306" 
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: dev_analytics
+      MYSQL_USER: devuser
+      MYSQL_PASSWORD: devpassword
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+    # restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+  php_sessions:
