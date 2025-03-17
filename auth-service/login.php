@@ -199,7 +199,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
         
         <div class="note">
-            <strong>Note:</strong> This is a prototype authentication service
+            <strong>Note:</strong> This is a prototype authentication service, use "user4" with "password4" for testing
         </div>
     </div>
 </body>
