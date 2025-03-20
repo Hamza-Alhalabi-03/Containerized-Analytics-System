@@ -127,8 +127,8 @@ def main():
             print(f"Error in main loop: {str(e)}", flush=True)
             print(f"Error type: {type(e)}", flush=True)
         # Wait for 10 minutes
-        print("Waiting 10 minutes before next calculation...", flush=True)
-        time.sleep(600)
+        print("Waiting one minute before next calculation...", flush=True)
+        time.sleep(60)
 
 if __name__ == "__main__":
     try:
