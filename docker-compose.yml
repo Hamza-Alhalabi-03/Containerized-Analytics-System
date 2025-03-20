@@ -101,6 +101,18 @@ services:
       - app-network
     restart: unless-stopped
 
+  results-app:
+      build: ./results-app
+      ports:
+        - "8082:80"
+      depends_on:
+        mongodb:
+          condition: service_healthy
+      networks:
+        - app-network
+      # Remove the volume mount to avoid conflicts with vendor directory
+      # We'll copy the files into the container during build instead
+
 networks:
   app-network:
     driver: bridge
