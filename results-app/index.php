@@ -121,6 +121,22 @@ $results = iterator_to_array($cursor);
             margin-right: 16px;
             font-size: 14px;
         }
+
+        .nav-link {
+            color: var(--white);
+            background-color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 4px;
+            margin-right: 16px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .nav-link:hover {
+            background-color: var(--dark-blue);
+        }
         
         .logout-link {
             color: white;
@@ -219,6 +235,7 @@ $results = iterator_to_array($cursor);
             </div>
             <div class="user-controls">
                 <span class="welcome">Welcome, <?php echo htmlspecialchars($name); ?></span>
+                <a href="http://localhost:8080" class="nav-link">Enter Data</a>
                 <a href="logout.php" class="logout-link">Logout</a>
             </div>
         </div>
