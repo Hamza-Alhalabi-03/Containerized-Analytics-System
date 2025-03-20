@@ -1,0 +1,24 @@
+name: Docker Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Build Docker images
+        run: docker-compose build
+      
+      - name: Verify containers can start
+        run: |
+          docker-compose up -d
+          sleep 10
+          docker-compose ps
+          docker-compose down
