@@ -10,6 +10,10 @@ if (!isset($_COOKIE['auth_status']) || $_COOKIE['auth_status'] !== 'authenticate
 $username = $_COOKIE['auth_user'] ?? 'Unknown User';
 $name = $_COOKIE['auth_name'] ?? 'Unknown';
 
+// Enable error reporting
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // Database connection
 $conn = new mysqli('mysql', 'devuser', 'devpassword', 'dev_analytics');
 if ($conn->connect_error) {
@@ -28,15 +32,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             VALUES (?, ?, ?, ?, ?)";
     
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssiss", $developer_name, $primary_language, $years_experience, $project_type, $hours_per_week);
-    
-    if ($stmt->execute()) {
-        $success_message = "Data submitted successfully!";
+    if (!$stmt) {
+        $error_message = "Prepare failed: " . $conn->error;
     } else {
-        $error_message = "Error: " . $stmt->error;
+        $stmt->bind_param("ssiss", $developer_name, $primary_language, $years_experience, $project_type, $hours_per_week);
+        
+        if ($stmt->execute()) {
+            $success_message = "Data submitted successfully!";
+            // Verify the insert
+            $verify_sql = "SELECT * FROM developer_data WHERE developer_name = ? AND created_at >= NOW() - INTERVAL 1 MINUTE";
+            $verify_stmt = $conn->prepare($verify_sql);
+            $verify_stmt->bind_param("s", $developer_name);
+            $verify_stmt->execute();
+            $result = $verify_stmt->get_result();
+            
+            if ($result->num_rows === 0) {
+                $error_message = "Warning: Data might not have been saved. Please check the database.";
+            }
+            
+            $verify_stmt->close();
+        } else {
+            $error_message = "Error executing query: " . $stmt->error;
+        }
+        
+        $stmt->close();
     }
-    
-    $stmt->close();
 }
 
 $conn->close();
@@ -130,6 +150,22 @@ $conn->close();
         .welcome {
             margin-right: 16px;
             font-size: 14px;
+        }
+
+        .nav-link {
+            color: var(--white);
+            background-color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 4px;
+            margin-right: 16px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .nav-link:hover {
+            background-color: var(--dark-blue);
         }
         
         .logout-link {
@@ -260,6 +296,7 @@ $conn->close();
             </div>
             <div class="user-controls">
                 <span class="welcome">Welcome, <?php echo htmlspecialchars($name); ?></span>
+                <a href="http://localhost:8082" class="nav-link">View Results</a>
                 <a href="logout.php" class="logout-link">Logout</a>
             </div>
         </div>
