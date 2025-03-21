@@ -17,12 +17,6 @@ services:
       - app-network
     environment:
       - SESSION_SAVE_PATH=/var/lib/php/sessions
-    # restart: unless-stopped
-    # healthcheck:
-    #   test: ["CMD", "curl", "-f", "http://localhost:80"]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 3
 
   # Authentication Service
   auth-service:
@@ -37,12 +31,6 @@ services:
       - app-network
     environment:
       - SESSION_SAVE_PATH=/var/lib/php/sessions
-    # restart: unless-stopped
-    # healthcheck:
-    #   test: ["CMD", "curl", "-f", "http://localhost:80/health"]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 3
 
   # MySQL Database
   mysql:
