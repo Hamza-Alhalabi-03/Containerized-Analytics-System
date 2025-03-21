@@ -2,7 +2,7 @@
 
 // Check if user is authenticated using cookies
 if (!isset($_COOKIE['auth_status']) || $_COOKIE['auth_status'] !== 'authenticated') {
-    header('Location: http://localhost:8081/login.php');
+    header('Location: http://localhost:8081');
     exit;
 }
 
