@@ -2,7 +2,7 @@
 
 A modern, containerized web application for collecting and analyzing developer data. This system consists of multiple microservices working together to provide a secure, scalable, and user-friendly analytics platform.
 
-## Project Overview
+## 🎯 Project Overview
 
 This system is built using a microservices architecture with the following components:
 
@@ -12,6 +12,12 @@ This system is built using a microservices architecture with the following compo
 - **Results App** (Port 8082): Displays analytics and insights
 - **MySQL Database**: Stores user and developer data
 - **MongoDB**: Stores processed analytics data
+
+---
+## ▶️ Demo
+Watch the video explaining the project:  
+[🎬 Containerized Analytics Microservices Demo](https://youtu.be/vyFDY4-aEWs)
+---
 
 ## Prerequisites
 
@@ -93,4 +99,6 @@ Containerized-Analytics-System/
 docker-compose build <service-name>
 docker-compose up -d <service-name>
 ```
-
+## 📄 License
+This project is provided for educational and demonstration purposes only.  
+Created by Hamza Alhalabi as part of Containerization and Docker learning.
